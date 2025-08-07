@@ -1,18 +1,24 @@
 from abc import ABC, abstractmethod
 
-from motor.motor_asyncio import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
+
+from models.models import ItemModel
 
 
 class BaseMongoRepository(ABC):
-    def __init__(self, connection: AsyncIOMotorClient):
-        self.connection = connection
+    def __init__(self, collection: AsyncIOMotorCollection):
+        self.collection = collection
 
     @abstractmethod
-    async def create(self):
+    async def create(self, new_resource: ItemModel):
         pass
 
     @abstractmethod
-    async def read(self):
+    async def read_one(
+            self,
+            match: dict = None,
+            project: dict = None,
+    ) -> dict | None:
         pass
 
     @abstractmethod

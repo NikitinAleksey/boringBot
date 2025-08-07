@@ -1,16 +1,12 @@
-import random
-
-from deep_translator import GoogleTranslator
-from pydantic_settings import BaseSettings
-
 from database.respositories.interfaces import BaseMongoRepository
 from external.interface import BaseAPI
 from models.models import ItemModel, ContentModel, TranslatedContentModel
 from services.interface import BaseService
+from services.translator import BaseTranslator
 
 
 class FactsService(BaseService):
-    def __init__(self, translator: GoogleTranslator, api_service: BaseAPI,
+    def __init__(self, translator: BaseTranslator, api_service: BaseAPI,
                  repository: BaseMongoRepository):
         super().__init__(translator, api_service, repository)
 
@@ -31,8 +27,13 @@ class FactsService(BaseService):
         #
         # # Тут его надо нормализовать и перевести
 
+        # Получаем ресурс
         resource = await self.api_service.get_resource()
+        # Првоеряем, есть ли такой в бд по ссылке на ресурс и первым символам
+        has_already = await self.repository.read_one()
+        # Собираем item
         item = self._normalize_item(resource=resource)
+
         # TODO где-то тут отправляем в бд - рэбит может подрубить?
         from pprint import pprint
         pprint(item.dict())

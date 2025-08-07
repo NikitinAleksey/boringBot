@@ -32,5 +32,3 @@ class TextExtractor:
         buttons = self._texts.get(key, {}).get('buttons', [])
         return buttons
 
-
-text_extractor = TextExtractor()

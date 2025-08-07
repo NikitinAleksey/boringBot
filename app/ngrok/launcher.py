@@ -10,6 +10,7 @@ class LaunchNgrok:
         self.public_url = None
 
     def connect(self):
+        ngrok.kill()
         ngrok.set_auth_token(token=self.token.get_secret_value())
         self.public_url = ngrok.connect(self.port).public_url
 

@@ -1,16 +1,14 @@
 from abc import ABC, abstractmethod
 
-from deep_translator import GoogleTranslator
-from pydantic_settings import BaseSettings
-
 from database.respositories.interfaces import BaseMongoRepository
 from external.interface import BaseAPI
+from services.translator import BaseTranslator
 
 
 class BaseService(ABC):
     def __init__(
             self,
-            translator: GoogleTranslator,
+            translator: BaseTranslator,
             api_service: BaseAPI,
             repository: BaseMongoRepository,
     ):

@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
 
     bot = create_bot()
     app.state.boring_bot = bot
-    setup_bot(bot_instance=bot)
+    await setup_bot(bot_instance=bot)
     print(ngrok_instance.public_url + '/tg_hook')
     await bot.set_webhook(url=ngrok_instance.public_url + '/tg_hook')
     yield
