@@ -4,19 +4,22 @@ from aiogram import F, Router
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
+from dependency_injector.wiring import inject, Provide
 
 from bot.features.menu.dispatcher import StrategyDispatcher
 from bot.fsm.states import MenuState
+from dependencies.container import Container
 
 commands_router = Router()
 
 
 @commands_router.callback_query(F.data == "start")
 @commands_router.message(CommandStart())
+@inject
 async def start_handler(
         event: Union[Message, CallbackQuery],
         state: FSMContext,
-        strategy_dispatcher: StrategyDispatcher,
+        strategy_dispatcher: StrategyDispatcher = Provide[Container.strategy_dispatcher],
 ):
     """
     Обработчик команды /start или коллбэка с текстом start.
@@ -48,10 +51,11 @@ async def start_handler(
 
 @commands_router.callback_query(F.data == "main_menu")
 @commands_router.message(F.data == "main_menu")
+@inject
 async def menu_handler(
         event: Union[Message, CallbackQuery],
         state: FSMContext,
-        strategy_dispatcher: StrategyDispatcher,
+        strategy_dispatcher: StrategyDispatcher = Provide[Container.strategy_dispatcher],
 ):
     """
     Обработчик команды /main_menu или коллбэка с текстом start.

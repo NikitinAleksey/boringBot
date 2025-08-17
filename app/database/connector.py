@@ -25,9 +25,7 @@ class MongoConnector:
     def reconnect(self):
         self._client = AsyncIOMotorClient(self._uri)
 
-    async def get_connection(self) -> AsyncIOMotorClient:
-        if not await self.is_alive():
-            self.reconnect()
+    def get_connection(self) -> AsyncIOMotorClient:
         return self._client
 
     def close_connection(self):

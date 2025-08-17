@@ -19,4 +19,4 @@ class BaseTranslatorConfig(BaseSettings):
 
 class GoogleTranslatorConfig(BaseTranslatorConfig):
     API_KEY: SecretStr = Field(alias='GOOGLE_TRANSLATE_API_KEY')
-    CREDENTIALS: FilePath = Field(alias='GOOGLE_TRANSLATE_API_KEY')
+    CREDENTIALS: str = Field(alias='GOOGLE_APPLICATION_CREDENTIALS')

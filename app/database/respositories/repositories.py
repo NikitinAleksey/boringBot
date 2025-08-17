@@ -30,7 +30,7 @@ class MongoRepository(BaseMongoRepository):
         :param project: Проджект для возврата.
         :return: Словарь объекта (если найден) или None.
         """
-        result = await self.collection.find_one(match=match, project=project)
+        result = await self.collection.find_one(filter=match)
         return result
 
     async def update(self):

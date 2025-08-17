@@ -14,25 +14,19 @@ class StrategyDispatcher:
     def __init__(
             self,
             strategies: dict[str, BaseStrategy],
-            keyboard_factory: BaseKeyboardFactory,
-            text_extractor: TextExtractor,
-            service: BaseService,
     ):
         self.strategies = strategies
-        self.keyboard_factory = keyboard_factory
-        self.text_extractor = text_extractor
-        self.service = service
 
     async def dispatch(self, event: Union[Message, CallbackQuery], state: FSMContext) -> BotResponse | None:
         print('dispatch')
         current_state = await state.get_state()
         print(current_state)
         strategy = self.strategies.get(current_state)
+        print('==============================================')
         print(strategy)
+        print('==============================================')
+
         if strategy:
-            strategy_result = await strategy.execute(
-                event=event, state=state, keyboard_factory=self.keyboard_factory, text_extractor=self.text_extractor,
-                service=self.service,
-            )
+            strategy_result = await strategy().execute(event=event)
             return strategy_result
         print('No strategy')

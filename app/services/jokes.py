@@ -8,7 +8,7 @@ from services.interface import BaseService
 from services.translator import BaseTranslator
 
 
-class FactsService(BaseService):
+class JokesService(BaseService):
     def __init__(self, translator: BaseTranslator, api_services: dict[str, BaseAPI],
                  repository: BaseMongoRepository):
         super().__init__(translator, api_services, repository)
@@ -18,7 +18,7 @@ class FactsService(BaseService):
         Метод получения запрашиваемого объекта. Идет либо в бд, либо в апи.
         :return: Текст ответа.
         """
-        current_choice = random.randint(1, 5)
+        # current_choice = random.randint(1, 5)
         #
         # if current_choice == 1:
         #     item = await self.repository.get_random_record()

@@ -1,24 +1,43 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from dependencies.dependencies import get_ngrok, create_bot, setup_bot
+
+from bot.routes import boring
+from bot.routes import commands
+import dependencies.dependencies as deps
+from dependencies.container import Container
+from dependencies.dependencies import setup_bot
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    ngrok_instance = get_ngrok()
-    try:
-        ngrok_instance.connect()
-    except Exception as exc:
-        ngrok_instance.disconnect()
-    finally:
-        ngrok_instance.connect()
+    print('Start up')
+    container = Container()
+    print('Container created')
+    container.wire(modules=[deps, boring, commands])
+    # print(container.ngrok_config())
+    # # ngrok_instance = container.ngrok()
+    # try:
+    #     print('Connecting ngrok')
+    #     # ngrok_instance.connect()
+    #     print('Ngrok connected')
+    # except Exception as exc:
+    #     print(f'EXC: {exc}')
+    #     ngrok_instance.disconnect()
+    #     ngrok_instance.connect()
 
-    bot = create_bot()
+    print('Creating bot')
+    bot = container.bot()
+    print('BOt created')
+
     app.state.boring_bot = bot
-    await setup_bot(bot_instance=bot)
-    print(ngrok_instance.public_url + '/tg_hook')
-    await bot.set_webhook(url=ngrok_instance.public_url + '/tg_hook')
+    app.state.container = container
+
+    await setup_bot(bot_instance=bot, strategy_dispatcher=container.strategy_dispatcher)
+    # print(ngrok_instance.public_url + '/tg_hook')
+    # await ngrok_instance.wait_until_available()
+    await bot.set_webhook(url='https://gig-substantial-platform-workout.trycloudflare.com/tg_hook')
+    print('START UP IS COMPLETED')
     yield
-    ngrok_instance.disconnect()
+    # ngrok_instance.disconnect()
     await bot.delete_webhook()

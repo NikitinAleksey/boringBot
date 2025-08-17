@@ -9,11 +9,11 @@ class BaseService(ABC):
     def __init__(
             self,
             translator: BaseTranslator,
-            api_service: BaseAPI,
+            api_services: dict[str, BaseAPI],
             repository: BaseMongoRepository,
     ):
         self.translator = translator
-        self.api_service = api_service
+        self.api_services = api_services
         self.repository = repository
 
     @abstractmethod

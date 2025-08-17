@@ -1,13 +1,13 @@
 from pydantic import Field
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 
-from core.paths import BASE_DIR
+from core.configs.bot_config import BotConfig
+from core.configs.database_config import MongoConfig
+from core.configs.external_api_config import NumbersAPIConfig
+from core.configs.ngrok_config import NgrokConfig
+from core.configs.translators_configs import GoogleTranslatorConfig
 
 
 class CommonConfig(BaseSettings):
-
-    model_config = SettingsConfigDict(
-        env_file=BASE_DIR.parent.parent / '.env',
-        env_file_encoding='utf-8',
-        extra='ignore',
-    )
+    # Common api error message
+    API_ERROR: str = Field(..., alias="API_ERROR")

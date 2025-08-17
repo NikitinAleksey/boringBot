@@ -22,7 +22,7 @@ class StrategyMiddleware(BaseMiddleware):
 
         :param handler: Обработчик события.
         :param event: Событие Telegram.
-        :param data: Данные передаваемые в обработчик.
+        :param data: Данные, передаваемые в обработчик.
         :return: Результат выполнения обработчика.
         """
         data['strategy_dispatcher'] = self.strategy_dispatcher

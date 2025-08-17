@@ -14,5 +14,36 @@ class BaseAPIConfig(BaseSettings):
     )
 
 
+# Facts
 class NumbersAPIConfig(BaseAPIConfig):
     URL: str = Field(..., alias="NUMBERS_URL")
+
+
+class CatsNinjaAPIConfig(BaseAPIConfig):
+    URL: str = Field(..., alias="CATS_NINJA_URL")
+
+
+class UselessFactsAPIConfig(BaseAPIConfig):
+    URL: str = Field(..., alias="USELESS_FACTS_URL")
+
+
+class MeowFactsAPIConfig(BaseAPIConfig):
+    URL: str = Field(..., alias="MEOW_FACTS_URL")
+
+
+# class NasaApodAPIConfig(BaseAPIConfig):
+#     URL: str = Field(..., alias="NASA_APOD_URL")
+#     TOKEN: str = Field(..., alias="NASA_API_TOKEN")
+
+
+# Jokes
+class RandomJokeAPIConfig(BaseAPIConfig):
+    URL: str = Field(..., alias="RANDOM_JOKE_URL")
+
+
+class DadJokeAPIConfig(BaseAPIConfig):
+    URL: str = Field(..., alias="DAD_JOKE_URL")
+
+
+class ChuckNorrisAPIConfig(BaseAPIConfig):
+    URL: str = Field(..., alias="CHUCK_NORRIS_URL")

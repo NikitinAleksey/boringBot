@@ -5,7 +5,7 @@ from core.paths import BASE_DIR
 
 
 class NgrokConfig(BaseSettings):
-    NGROK_TOKEN: SecretStr
+    NGROK_AUTHTOKEN: SecretStr
     NGROK_PORT: str
 
     model_config = SettingsConfigDict(
