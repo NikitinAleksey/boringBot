@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorCursor
 
 from models.models import ItemModel
 
@@ -31,4 +31,19 @@ class BaseMongoRepository(ABC):
 
     @abstractmethod
     async def get_random_record(self):
+        pass
+
+    @abstractmethod
+    async def read_many(
+            self,
+            match: dict = None,
+            project: dict = None,
+    ) -> AsyncIOMotorCursor:
+        pass
+
+    @abstractmethod
+    async def insert_many(
+            self,
+            query: list[dict],
+    ):
         pass

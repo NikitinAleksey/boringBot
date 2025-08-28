@@ -7,3 +7,5 @@ class MenuState(StatesGroup):
     joke = State()
     fact = State()
     video = State()
+    quiz = State()
+

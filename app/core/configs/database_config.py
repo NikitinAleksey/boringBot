@@ -18,6 +18,7 @@ class MongoConfig(BaseSettings):
     FACTS: str = Field(description='Название коллекции с фактами')
     JOKES: str = Field(description='Название коллекции с шутками')
     VIDEOS: str = Field(description='Название коллекции с видео')
+    QUIZZES: str = Field(description='Название коллекции с вопросами для квизов')
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR.parent.parent / '.env',

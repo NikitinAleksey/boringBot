@@ -1,6 +1,8 @@
 import random
 from typing import Optional
 
+from aiogram.fsm.context import FSMContext
+
 from database.respositories.interfaces import BaseMongoRepository
 from external.interface import BaseAPI
 from models.models import ItemModel, ContentModel, TranslatedContentModel
@@ -13,9 +15,11 @@ class JokesService(BaseService):
                  repository: BaseMongoRepository):
         super().__init__(translator, api_services, repository)
 
-    async def get_item(self) -> str:
+    async def get_item(self, state: Optional[FSMContext] = None) -> str:
         """
         Метод получения запрашиваемого объекта. Идет либо в бд, либо в апи.
+
+        :param state: Опциональный параметр состояния, здесь не нужен.
         :return: Текст ответа.
         """
         # current_choice = random.randint(1, 5)

@@ -31,11 +31,6 @@ class MeowFactsAPIConfig(BaseAPIConfig):
     URL: str = Field(..., alias="MEOW_FACTS_URL")
 
 
-# class NasaApodAPIConfig(BaseAPIConfig):
-#     URL: str = Field(..., alias="NASA_APOD_URL")
-#     TOKEN: str = Field(..., alias="NASA_API_TOKEN")
-
-
 # Jokes
 class RandomJokeAPIConfig(BaseAPIConfig):
     URL: str = Field(..., alias="RANDOM_JOKE_URL")
@@ -47,3 +42,9 @@ class DadJokeAPIConfig(BaseAPIConfig):
 
 class ChuckNorrisAPIConfig(BaseAPIConfig):
     URL: str = Field(..., alias="CHUCK_NORRIS_URL")
+
+
+# Quizzes
+class OpenTdbAPIConfig(BaseAPIConfig):
+    URL: str = Field(..., alias="OPEN_TDB_URL")
+

@@ -27,6 +27,6 @@ class StrategyDispatcher:
         print('==============================================')
 
         if strategy:
-            strategy_result = await strategy().execute(event=event)
+            strategy_result = await strategy().execute(event=event, state=state)
             return strategy_result
         print('No strategy')

@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
     await setup_bot(bot_instance=bot, strategy_dispatcher=container.strategy_dispatcher)
     # print(ngrok_instance.public_url + '/tg_hook')
     # await ngrok_instance.wait_until_available()
-    await bot.set_webhook(url='https://gig-substantial-platform-workout.trycloudflare.com/tg_hook')
+    await bot.set_webhook(url='https://tournaments-till-subsidiary-completing.trycloudflare.com/tg_hook')
     print('START UP IS COMPLETED')
     yield
     # ngrok_instance.disconnect()

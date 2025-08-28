@@ -1,4 +1,4 @@
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorCursor
 from pymongo.results import InsertOneResult
 
 from database.respositories.interfaces import BaseMongoRepository
@@ -41,3 +41,24 @@ class MongoRepository(BaseMongoRepository):
 
     async def get_random_record(self):
         pass
+
+    async def read_many(
+            self,
+            match: dict = None,
+            project: dict = None,
+    ) -> AsyncIOMotorCursor:
+        """
+        Ищет объекты в своей коллекции.
+
+        :param match: Параметры поиска.
+        :param project: Проджект для возврата.
+        :return: Курсор.
+        """
+        result = self.collection.find(filter=match)
+        return result
+
+    async def insert_many(
+            self,
+            query: list[dict],
+    ):
+        await self.collection.insert_many(documents=query)

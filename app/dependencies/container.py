@@ -6,26 +6,31 @@ from google.oauth2 import service_account
 
 from bot.bot import BoringBot
 from bot.features.menu.dispatcher import StrategyDispatcher
-from bot.features.menu.strategies import FactStrategy, StartStrategy, MainMenuStrategy, JokeStrategy
+from bot.features.menu.strategies import FactStrategy, StartStrategy, MainMenuStrategy, JokeStrategy, QuizStrategy
 from bot.fsm.states import MenuState
 from bot.keyboards.builders import InlineKeyboardFactory
 from bot.static.text_extractor import TextExtractor
 from core.configs.bot_config import BotConfig
 from core.configs.database_config import MongoConfig
 from core.configs.external_api_config import NumbersAPIConfig, CatsNinjaAPIConfig, UselessFactsAPIConfig, \
-    MeowFactsAPIConfig, RandomJokeAPIConfig, DadJokeAPIConfig, ChuckNorrisAPIConfig
+    MeowFactsAPIConfig, RandomJokeAPIConfig, DadJokeAPIConfig, ChuckNorrisAPIConfig, OpenTdbAPIConfig
 from core.configs.translators_configs import GoogleTranslatorConfig
 from database.collections import Collections
 from database.connector import MongoConnector
 from database.respositories.repositories import MongoRepository
 from external.facts.facts import NumbersAPI, CatsNinjaAPI, UselessFactsAPI, MeowFactsAPI
 from external.jokes.jokes import RandomJokeAPI, DadJokeAPI, ChuckNorrisAPI
+from external.quizzes.quizzes import OpenTdbAPI
 from services.facts import FactsService
 from services.jokes import JokesService
+from services.parsers.open_tdb import OpenTDBParser
+from services.quiz import QuizService
 from services.translator import RealGoogleTranslator, FreeGoogleTranslator
 
 
 class Container(containers.DeclarativeContainer):
+    # TODO распилить к хуям этой контейнер + выпилить создание конфигов - конфиги создаем в конфигах, а тут только в
+    #  Object суем
     config = providers.Configuration()
 
     bot_config = providers.Object(BotConfig())
@@ -47,6 +52,7 @@ class Container(containers.DeclarativeContainer):
             'meow_facts': meow_facts,
         }
 
+    # Jokes
     # random_joke_api = RandomJokeAPI(RandomJokeAPIConfig()) # TODO хуета поганая, выпилить
     dad_joke_api = DadJokeAPI(DadJokeAPIConfig())
     chuck_norris_joke_api = ChuckNorrisAPI(ChuckNorrisAPIConfig())
@@ -57,6 +63,12 @@ class Container(containers.DeclarativeContainer):
         'chuck_norris_joke_api': chuck_norris_joke_api,
     }
 
+    # Quizzes
+    open_tdb_api = OpenTdbAPI(OpenTdbAPIConfig())
+
+    api_quizzes_services = {
+        'open_tdb_api': open_tdb_api,
+    }
     # Ngrok
     # ngrok = providers.Singleton(LaunchNgrok, config=ngrok_config)
     # Translators setup:
@@ -88,10 +100,14 @@ class Container(containers.DeclarativeContainer):
     jokes_collection = collections.get_collection(
         connection=connector().get_connection(), db_name=mongo_config().DB_NAME, collection_name=mongo_config().JOKES,
     )
+    quizzes_collection = collections.get_collection(
+        connection=connector().get_connection(), db_name=mongo_config().DB_NAME, collection_name=mongo_config().QUIZZES,
+    )
 
     # Repositories
     facts_repo = MongoRepository(collection=facts_collection)
     jokes_repo = MongoRepository(collection=jokes_collection)
+    quizzes_repo = MongoRepository(collection=quizzes_collection)
 
     # Keyboards
     inline_keyboard = InlineKeyboardFactory()
@@ -111,6 +127,13 @@ class Container(containers.DeclarativeContainer):
         )
     )
 
+    quizzes_service = providers.Object(QuizService(
+        translator=real_google_translator,
+        repository=quizzes_repo,
+        api_services=api_quizzes_services,
+        parser=OpenTDBParser(),
+        )
+    )
     # Strategies
     start_strategy = providers.Object(StartStrategy(
         keyboard_factory=inline_keyboard,
@@ -137,11 +160,20 @@ class Container(containers.DeclarativeContainer):
         )
     )
 
+    quiz_strategy = providers.Object(
+        QuizStrategy(
+            service=quizzes_service(),
+            keyboard_factory=inline_keyboard,
+            text_extractor=text_extractor,
+        )
+    )
+
     strategies = {
         MenuState.start: start_strategy,
         MenuState.main: main_menu_strategy,
         MenuState.fact: fact_strategy,
         MenuState.joke: joke_strategy,
+        MenuState.quiz: quiz_strategy,
     }
 
     # StrategyDispatcher
