@@ -7,7 +7,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 class BaseKeyboardFactory(ABC):
     @staticmethod
     @abstractmethod
-    def create(buttons: list[str] | list[list[str, str]], adjust: int):
+    def create(buttons: list[str] | list[tuple[str, str]], adjust: int):
         pass
 
 

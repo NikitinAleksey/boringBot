@@ -1,5 +1,5 @@
 from models.models import QuestionModel, ContentModel
-from services.parsers.interfaces import BaseQuizParser
+from services.parsers.parser_interfaces import BaseQuizParser
 
 
 class OpenTDBParser(BaseQuizParser):

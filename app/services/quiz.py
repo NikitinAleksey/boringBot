@@ -1,4 +1,5 @@
 import random
+import re
 from datetime import datetime
 from typing import Optional
 
@@ -8,16 +9,17 @@ from bot.features.menu.models import BotResponse
 from database.respositories.interfaces import BaseMongoRepository
 from external.interface import BaseAPI
 from models.models import ItemModel, QuizModel, QuestionModel, TranslatedContentModel
-from services.interface import BaseService
-from services.parsers.interfaces import BaseQuizParser
+from services.services_interface import BaseService
+from services.parsers.parser_interfaces import BaseQuizParser
 from services.translator import BaseTranslator
 
 
 class QuizService(BaseService):
     def __init__(self, translator: BaseTranslator, api_services: dict[str, BaseAPI],
-                 repository: BaseMongoRepository, parser: BaseQuizParser):
+                 repository: BaseMongoRepository, parser: BaseQuizParser, quiz_repository: BaseMongoRepository):
         super().__init__(translator, api_services, repository)
         self.parser = parser
+        self.quiz_repository = quiz_repository
 
     async def get_item(self, state: Optional[FSMContext] = None):
         """
@@ -46,15 +48,18 @@ class QuizService(BaseService):
             print(f'Have current quiz: {current_quiz}')
             questions = current_quiz.get('questions', [])
             question_index = state_data.get('question_index')
+            answer = state_data.get('answer')
+            questions[question_index]['user_answer'] = answer
+            questions[question_index]['is_correct'] = questions[question_index]['correct_answer'] == answer
             question_index += 1
-            if question_index < len(questions):
-                await state.update_data({'question_index': question_index})
-            else:
+            if question_index >= len(questions):
                 quiz_model = self._calculate_results(quiz=current_quiz)
+                quiz_model.finish_time = datetime.utcnow()
                 quiz_dict = quiz_model.dict()
-                # TODO тут по идее надо записывать результаты квиза (но у меня только 1 репозиторий, который не
-                #  работает с коллекцией квизов, а только с вопросами - сиди и думай)
                 await state.update_data({'quiz': quiz_dict, 'finished': True, 'question_index': None})
+                await self.quiz_repository.insert_one(new_resource=quiz_dict)
+            else:
+                await state.update_data({'question_index': question_index})
 
     def _normalize_item(
             self,
@@ -73,9 +78,15 @@ class QuizService(BaseService):
             return QuestionModel(**current_object)
 
         translated_text = self.translator.translate(text=new_object.content.text)
+        answers_row = "".join([f"<A{i}>{answer}</A{i}>" for i, answer in enumerate(new_object.answers)])
+        translated_answers = self.translator.translate(text=answers_row)
+        answers_list = [re.search(f"<A{i}>(.*?)</A{i}>", translated_answers
+                                  ).group(1) for i in range(len(new_object.answers))]
+        answers_list = [answer.strip().capitalize() for answer in answers_list]
         translated = TranslatedContentModel(
             text=translated_text,
             translated_by='google',
+            answers=answers_list,
         )
         new_object.translated = translated
         return new_object
@@ -122,7 +133,9 @@ class QuizService(BaseService):
                 all_questions.append(questions_from_db[question.title])
             else:
                 current_question = self._normalize_item(new_object=question, api_service=api_service, current_object=None)
-                questions_to_save.append(current_question.model_dump(exclude_none=True))
+                current_question_dict = current_question.dict(exclude_none=True)
+                questions_to_save.append(current_question_dict)
+                all_questions.append(current_question_dict)
 
         await self.repository.insert_many(query=questions_to_save)
         return all_questions

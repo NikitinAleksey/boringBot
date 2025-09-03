@@ -17,7 +17,8 @@ from core.configs.external_api_config import NumbersAPIConfig, CatsNinjaAPIConfi
 from core.configs.translators_configs import GoogleTranslatorConfig
 from database.collections import Collections
 from database.connector import MongoConnector
-from database.respositories.repositories import MongoRepository
+from database.respositories.repositories import (FactsRepository, JokesRepository,
+                                                 QuizQuestionsRepository, QuizzesRepository)
 from external.facts.facts import NumbersAPI, CatsNinjaAPI, UselessFactsAPI, MeowFactsAPI
 from external.jokes.jokes import RandomJokeAPI, DadJokeAPI, ChuckNorrisAPI
 from external.quizzes.quizzes import OpenTdbAPI
@@ -53,7 +54,6 @@ class Container(containers.DeclarativeContainer):
         }
 
     # Jokes
-    # random_joke_api = RandomJokeAPI(RandomJokeAPIConfig()) # TODO хуета поганая, выпилить
     dad_joke_api = DadJokeAPI(DadJokeAPIConfig())
     chuck_norris_joke_api = ChuckNorrisAPI(ChuckNorrisAPIConfig())
 
@@ -69,8 +69,6 @@ class Container(containers.DeclarativeContainer):
     api_quizzes_services = {
         'open_tdb_api': open_tdb_api,
     }
-    # Ngrok
-    # ngrok = providers.Singleton(LaunchNgrok, config=ngrok_config)
     # Translators setup:
     # Google credentials
     credentials = service_account.Credentials.from_service_account_file(
@@ -101,13 +99,19 @@ class Container(containers.DeclarativeContainer):
         connection=connector().get_connection(), db_name=mongo_config().DB_NAME, collection_name=mongo_config().JOKES,
     )
     quizzes_collection = collections.get_collection(
-        connection=connector().get_connection(), db_name=mongo_config().DB_NAME, collection_name=mongo_config().QUIZZES,
+        connection=connector().get_connection(), db_name=mongo_config().DB_NAME,
+        collection_name=mongo_config().QUIZZES,
+    )
+    quiz_questions_collection = collections.get_collection(
+        connection=connector().get_connection(), db_name=mongo_config().DB_NAME,
+        collection_name=mongo_config().QUESTIONS,
     )
 
     # Repositories
-    facts_repo = MongoRepository(collection=facts_collection)
-    jokes_repo = MongoRepository(collection=jokes_collection)
-    quizzes_repo = MongoRepository(collection=quizzes_collection)
+    facts_repo = FactsRepository(collection=facts_collection)
+    jokes_repo = JokesRepository(collection=jokes_collection)
+    quizzes_repo = QuizzesRepository(collection=quizzes_collection)
+    quiz_questions_repo = QuizQuestionsRepository(collection=quiz_questions_collection)
 
     # Keyboards
     inline_keyboard = InlineKeyboardFactory()
@@ -129,9 +133,10 @@ class Container(containers.DeclarativeContainer):
 
     quizzes_service = providers.Object(QuizService(
         translator=real_google_translator,
-        repository=quizzes_repo,
+        repository=quiz_questions_repo,
         api_services=api_quizzes_services,
         parser=OpenTDBParser(),
+        quiz_repository=quizzes_repo,
         )
     )
     # Strategies

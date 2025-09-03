@@ -8,6 +8,7 @@ class TranslatedContentModel(BaseModel):
     text: str = Field(description='Переведённый текст контента')
     file_url: Optional[str] = Field(default=None, description='Ссылка на переведённый файл (если есть)')
     translated_by: Optional[str] = Field(default="google", description='Источник перевода')
+    answers: Optional[list[str]] = Field(default_factory=list, description='Переведенные ответы, если это квиз')
 
 
 class ContentModel(BaseModel):

@@ -7,7 +7,7 @@ from bot.features.menu.strategies import BaseStrategy
 from bot.features.menu.models import BotResponse
 from bot.keyboards.builders import BaseKeyboardFactory
 from bot.static.text_extractor import TextExtractor
-from services.interface import BaseService
+from services.services_interface import BaseService
 
 
 class StrategyDispatcher:

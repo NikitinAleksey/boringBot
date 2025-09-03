@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from database.respositories.interfaces import BaseMongoRepository
 from external.interface import BaseAPI
 from models.models import ItemModel, ContentModel, TranslatedContentModel
-from services.interface import BaseService
+from services.services_interface import BaseService
 from services.translator import BaseTranslator
 
 
@@ -43,7 +43,7 @@ class JokesService(BaseService):
         else:
             print('Нет в бд')
             item = self._normalize_item(resource=resource, api_service=api_service, current_object=None)
-            await self.repository.create(new_resource=item)
+            await self.repository.insert_one(new_resource=item)
 
         print(item)
         return item.translated.text

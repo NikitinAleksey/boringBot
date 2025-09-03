@@ -1,0 +1,85 @@
+{
+  "response_code": 0,
+  "results": [
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Entertainment: Video Games",
+      "question": "When was &quot;Garry&#039;s Mod&quot; released?",
+      "correct_answer": "December 24, 2004",
+      "incorrect_answers": ["November 13, 2004", "December 13, 2004", "November 12, 2004"]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "History",
+      "question": "What did the abbreviation &quot;RMS&quot; stand for in the RMS Titanic in 1912?",
+      "correct_answer": "Royal Mail Ship",
+      "incorrect_answers": ["Royal Majesty Service", "Regular Maritime Schedule ", "Regulated Maelstrom Sensor"]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "Entertainment: Video Games",
+      "question": "Before it&#039;s redesign of the company logo in the year 2000, which 3D shape is NOT represented in the Electronic Arts logo?",
+      "correct_answer": "Cylinder",
+      "incorrect_answers": ["Pyramid", "Cube", "Sphere"]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "General Knowledge",
+      "question": "What is the German word for &quot;spoon&quot;?",
+      "correct_answer": "L&ouml;ffel",
+      "incorrect_answers": ["Gabel", "Messer", "Essst&auml;bchen"]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "Entertainment: Japanese Anime &amp; Manga",
+      "question": "In &quot;Hunter x Hunter&quot;, which of the following is NOT a type of Nen aura?",
+      "correct_answer": "Restoration",
+      "incorrect_answers": ["Emission", "Transmutation", "Specialization"]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Entertainment: Video Games",
+      "question": "Which one of these characters was first introduced in Sonic Boom: Rise of Lyric?",
+      "correct_answer": "Sticks the Badger",
+      "incorrect_answers": ["Mighty the Armadillo", "Espio the Chameleon", "Rouge the Bat"]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "Entertainment: Books",
+      "question": "Which is NOT a book in the Harry Potter Series?",
+      "correct_answer": "The House Elf",
+      "incorrect_answers": ["The Chamber of Secrets", "The Prisoner of Azkaban", "The Deathly Hallows"]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Entertainment: Musicals &amp; Theatres",
+      "question": "The musical &quot;Dirty Rotten Scoundrels&quot; is set in what country?",
+      "correct_answer": "France",
+      "incorrect_answers": ["USA", "Germany", "Sweden"]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "History",
+      "question": "Which country was Josef Stalin born in?",
+      "correct_answer": "Georgia",
+      "incorrect_answers": ["Russia", "Germany", "Poland"]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "Entertainment: Music",
+      "question": "Who designed the album cover for True Romance, an album by Estelle?",
+      "correct_answer": "Rebecca Sugar",
+      "incorrect_answers": ["Matt Burnett", "Ian Jones Quartey", "Ben Leven"]
+    }
+  ]
+}

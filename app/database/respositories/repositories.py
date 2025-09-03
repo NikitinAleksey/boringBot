@@ -9,14 +9,14 @@ class MongoRepository(BaseMongoRepository):
     def __init__(self, collection: AsyncIOMotorCollection):
         super().__init__(collection)
 
-    async def create(self, new_resource: ItemModel) -> InsertOneResult:
+    async def insert_one(self, new_resource: dict) -> InsertOneResult:
         """
         Создает новый объект в своей коллекции.
 
         :param new_resource: Новый объект.
         :return: Результат вставки.
         """
-        return await self.collection.insert_one(document=new_resource.model_dump())
+        return await self.collection.insert_one(document=new_resource)
 
     async def read_one(
             self,
@@ -39,9 +39,6 @@ class MongoRepository(BaseMongoRepository):
     async def delete(self):
         pass
 
-    async def get_random_record(self):
-        pass
-
     async def read_many(
             self,
             match: dict = None,
@@ -61,4 +58,30 @@ class MongoRepository(BaseMongoRepository):
             self,
             query: list[dict],
     ):
+        """
+        Создает новые объекты в своей коллекции.
+
+        :param query: Новый объект.
+        :return: Результат вставки.
+        """
         await self.collection.insert_many(documents=query)
+
+
+class FactsRepository(MongoRepository):
+    """Репозиторий фактов"""
+    pass
+
+
+class JokesRepository(MongoRepository):
+    """Репозиторий шуток"""
+    pass
+
+
+class QuizzesRepository(MongoRepository):
+    """Репозиторий результатов квизов"""
+    pass
+
+
+class QuizQuestionsRepository(MongoRepository):
+    """Репозиторий вопросов для квизов"""
+    pass

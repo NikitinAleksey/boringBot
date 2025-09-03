@@ -9,10 +9,20 @@ class OpenTdbAPI(BaseAPI):
         super().__init__(config)
 
     async def get_resource(self):
-        # TODO щаложить расширяемость с помощью кваргов в этом методе на уровне интерфейса - они будет полезны все, а
-        #  не только здесь. А пока хардкод!!!!! amount, type, category, difficulty
-        url = self.config.URL + '/api.php?' + 'amount=10&type=multiple' # это и есть хардкод
+        url = self.config.URL + '/api.php?' + 'amount=10&type=multiple' # это хардкод, надо исправить
         async with ClientSession() as client:
             resp = await client.get(url=url)
             data = await resp.json()
             return data
+
+# async def main():
+#     url = 'https://opentdb.com/api.php?amount=10&type=multiple'
+#     async with ClientSession() as client:
+#         resp = await client.get(url=url)
+#         data = await resp.json()
+#         print(data)
+#
+#
+# if __name__ == "__main__":
+#     import asyncio
+#     asyncio.run(main())

@@ -4,7 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorCollection
 
 from database.respositories.interfaces import BaseMongoRepository
 from external.interface import BaseAPI
-from services.interface import BaseService
+from services.services_interface import BaseService
 from services.translator import RealGoogleTranslator
 
 

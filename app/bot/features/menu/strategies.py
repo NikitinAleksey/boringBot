@@ -9,7 +9,7 @@ from bot.keyboards.builders import BaseKeyboardFactory
 from bot.static.text_extractor import TextExtractor
 from external.interface import BaseAPI
 from models.models import QuizModel
-from services.interface import BaseService
+from services.services_interface import BaseService
 
 
 class BaseStrategy(ABC):
@@ -159,7 +159,7 @@ class QuizStrategy(BaseStrategy):
         return BotResponse(text=text, kb=kb)
 
     @staticmethod
-    async def _extract_data(state: FSMContext):
+    async def _extract_data(state: FSMContext) -> tuple[str, list[tuple[str, str]]]:
         """
 
         :param state:
@@ -170,30 +170,22 @@ class QuizStrategy(BaseStrategy):
         quiz = QuizModel(**quiz) # TODO тут аккуратнее, вдруг не будет квиза, обработать
         question_index = data.get('question_index')
         is_finished = data.get('finished')
-        print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print(quiz)
-        print(question_index)
-        print(is_finished)
-        print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 
         if quiz and is_finished:
             text = f'Завершен. Отвечено правильно {quiz.correct_count}/{quiz.answered_count}'
-            buttons = [['Начать заново', 'quiz']] # Естественно это и текст в json перевести
+            buttons = [('Начать заново', 'quiz'), ('В главное меню', 'main_menu')] # Естественно это и текст в json перевести
+            await state.update_data({})
         elif quiz and question_index is not None:
             print('QUESTIONS')
-            for q in quiz.questions:
-                print(q)
+            print('[[[[[[[[[[[[[[[[[[[[[[[[[[')
+            print(len(quiz.questions))
+            print(question_index)
+            print(']]]]]]]]]]]]]]]]]]]]]]]]]]')
             questions = quiz.questions
             question = questions[question_index]
             text = question.translated.text
-            buttons = [[answer, answer] for answer in question.answers]
+            buttons = [(question.answers[i], question.translated.answers[i]) for i in range(len(question.answers))]
         else:
             text = 'Fuck error'
-            buttons = [['Suck my dick', 'quiz']]
+            buttons = [('Suck my dick', 'quiz')]
         return text, buttons
-
-    # TODO
-    #  1 ЗАпустился квиз
-    #  2 Надо обрабатывать ответы и записывать их, в СОСТОЯНИЕ? - наверное
-    #  3 Ответы не переведены - это плохо
-    #  4 В стратегии только 1 репозиторий, надо найти способ записи в нужную коллекцию с помощью одного репозитория

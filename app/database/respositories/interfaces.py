@@ -10,7 +10,7 @@ class BaseMongoRepository(ABC):
         self.collection = collection
 
     @abstractmethod
-    async def create(self, new_resource: ItemModel):
+    async def insert_one(self, new_resource: dict):
         pass
 
     @abstractmethod
@@ -27,10 +27,6 @@ class BaseMongoRepository(ABC):
 
     @abstractmethod
     async def delete(self):
-        pass
-
-    @abstractmethod
-    async def get_random_record(self):
         pass
 
     @abstractmethod
