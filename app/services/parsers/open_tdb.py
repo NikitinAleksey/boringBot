@@ -1,3 +1,5 @@
+import html
+
 from models.models import QuestionModel, ContentModel
 from services.parsers.parser_interfaces import BaseQuizParser
 
@@ -15,10 +17,10 @@ class OpenTDBParser(BaseQuizParser):
         question_models = []
 
         for question in questions:
-            category = question.get('category')
-            correct_answer = question.get('correct_answer')
-            incorrect_answers = question.get('incorrect_answers')
-            question = question.get('question')
+            category = html.unescape(question.get('category'))
+            correct_answer = html.unescape(question.get('correct_answer'))
+            incorrect_answers = [html.unescape(answer) for answer in question.get('incorrect_answers')]
+            question = html.unescape(question.get('question'))
 
             content = ContentModel(text=question)
             question_model = QuestionModel(

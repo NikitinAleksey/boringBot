@@ -27,6 +27,10 @@ class DadJokeAPI(BaseAPI):
                 url=self.config.URL,
                 headers={"Accept": "application/json"}
             )
+            print('111111111111111111111111111111111111111111111111111')
+            print(resp.status)
+            print(await resp.text())
+
             data = await resp.json()
             return data.get("joke", "")
 

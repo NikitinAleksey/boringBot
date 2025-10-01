@@ -1,3 +1,4 @@
+import html
 from abc import ABC, abstractmethod
 from typing import Union
 
@@ -30,7 +31,7 @@ class RealGoogleTranslator(BaseTranslator):
 
     def translate(self, text: str, target_lang: str = "ru") -> str:
         result = self.client.translate(text, target_language=target_lang)
-        return result["translatedText"]
+        return html.unescape(result["translatedText"])
 
 
 class FreeGoogleTranslator(BaseTranslator):

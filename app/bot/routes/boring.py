@@ -3,6 +3,7 @@ from typing import Union
 from aiogram import F, Router
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
+from aiogram.enums import ChatAction
 from aiogram.types import CallbackQuery, Message
 from dependency_injector.wiring import Provide, inject
 
@@ -84,6 +85,10 @@ async def quiz_handler(
     await state.set_state(MenuState.quiz)
     await state.set_data({})
     message = event if isinstance(event, Message) else event.message
+    await message.bot.send_chat_action(
+        chat_id=message.chat.id,
+        action=ChatAction.TYPING
+    )
     response = await strategy_dispatcher.dispatch(event=event, state=state)
     print('RESPONSE ')
     print(response)
