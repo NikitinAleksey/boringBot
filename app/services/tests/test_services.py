@@ -24,8 +24,8 @@ async def test_quiz_service(
         fixture_quizzes_repository,
         fixture_quizzes_collection,
 ):
-    fixture_fsm_state.clear()
-    fixture_fsm_state.set_data({})
+    await fixture_fsm_state.clear()
+    await fixture_fsm_state.set_data({})
     expected_questions_len = len(fixture_questions.get('results'))
     await fixture_quiz_services.get_item(state=fixture_fsm_state)
 

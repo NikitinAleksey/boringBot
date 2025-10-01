@@ -119,12 +119,15 @@ def fixture_quizzes_collection(
 def fixture_questions_repository(fixture_questions_collection):
     repository = QuizQuestionsRepository(collection=fixture_questions_collection)
     repository.insert_many = AsyncMock()
+    repository.insert_one = AsyncMock()
     return repository
 
 
 @pytest.fixture
 def fixture_quizzes_repository(fixture_quizzes_collection):
     repository = QuizzesRepository(collection=fixture_quizzes_collection)
+    repository.insert_many = AsyncMock()
+    repository.insert_one = AsyncMock()
     return repository
 
 

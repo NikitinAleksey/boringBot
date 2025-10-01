@@ -42,7 +42,7 @@ class QuizService(BaseService):
                 questions=normalized_questions,
                 start_time=datetime.utcnow(),
             )
-            await state.update_data({'quiz': quiz_model.dict(), 'question_index': 0})
+            await state.update_data({'quiz': quiz_model.model_dump(), 'question_index': 0})
 
         else:
             print(f'Have current quiz: {current_quiz}')
@@ -55,7 +55,7 @@ class QuizService(BaseService):
             if question_index >= len(questions):
                 quiz_model = self._calculate_results(quiz=current_quiz)
                 quiz_model.finish_time = datetime.utcnow()
-                quiz_dict = quiz_model.dict()
+                quiz_dict = quiz_model.model_dump()
                 await state.update_data({'quiz': quiz_dict, 'finished': True, 'question_index': None})
                 await self.quiz_repository.insert_one(new_resource=quiz_dict)
             else:
@@ -133,7 +133,7 @@ class QuizService(BaseService):
                 all_questions.append(questions_from_db[question.title])
             else:
                 current_question = self._normalize_item(new_object=question, api_service=api_service, current_object=None)
-                current_question_dict = current_question.dict(exclude_none=True)
+                current_question_dict = current_question.model_dump(exclude_none=True)
                 questions_to_save.append(current_question_dict)
                 all_questions.append(current_question_dict)
 
