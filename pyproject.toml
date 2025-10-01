@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "boringbot"
+version = "0.1.0"
+description = ""
+authors = ["Aleksey Nikitin <nick12.11.2014@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram = "^3.21.0"
+pydantic-settings = "^2.10.1"
+pyngrok = "^7.2.12"
+fastapi = "^0.116.1"
+deep-translator = "^1.11.4"
+motor = "^3.7.1"
+google = "^3.0.0"
+google-cloud-translate = "^3.21.1"
+uvicorn = "^0.35.0"
+dependency-injector = "^4.48.1"
+cloudflared = "^1.0.0.2"
+pytest = "^8.4.1"
+pytest-asyncio = "^1.1.0"
+coverage = "^7.10.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
