@@ -29,6 +29,12 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongo_data:/data/db
+#    healthcheck:
+#      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+#      interval: 60s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 5s
 
 volumes:
   mongo_data:

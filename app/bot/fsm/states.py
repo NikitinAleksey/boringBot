@@ -6,4 +6,6 @@ class MenuState(StatesGroup):
     main = State()
     joke = State()
     fact = State()
-    youtube = State()
+    video = State()
+    quiz = State()
+

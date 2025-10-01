@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr
 
@@ -7,7 +5,7 @@ from core.paths import BASE_DIR
 
 
 class NgrokConfig(BaseSettings):
-    NGROK_TOKEN: SecretStr
+    NGROK_AUTHTOKEN: SecretStr
     NGROK_PORT: str
 
     model_config = SettingsConfigDict(

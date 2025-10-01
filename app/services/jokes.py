@@ -10,7 +10,7 @@ from services.services_interface import BaseService
 from services.translator import BaseTranslator
 
 
-class FactsService(BaseService):
+class JokesService(BaseService):
     def __init__(self, translator: BaseTranslator, api_services: dict[str, BaseAPI],
                  repository: BaseMongoRepository):
         super().__init__(translator, api_services, repository)
@@ -22,7 +22,7 @@ class FactsService(BaseService):
         :param state: Опциональный параметр состояния, здесь не нужен.
         :return: Текст ответа.
         """
-        current_choice = random.randint(1, 5)
+        # current_choice = random.randint(1, 5)
         #
         # if current_choice == 1:
         #     item = await self.repository.get_random_record()
